@@ -103,14 +103,26 @@ void iniciaSistema()
  Parametros de entrada: nenhum
  Retorno: codigo do evento
 *************************************************************************/
+void types(String a) { Serial.println("it's a String"); }
+void types(int a) { Serial.println("it's an int"); }
+void types(char *a) { Serial.println("it's a char*"); }
+void types(float a) { Serial.println("it's a float"); }
+void types(bool a) { Serial.println("it's a bool"); }
+
 int evento = NENHUM_EVENTO;
 String str_evento;
 int obterEvento() {
+  bool condicao = false;
   
-  Serial.println("Digite o evento:");
-  str_evento = Serial.readStringUntil('\n');
-  evento = str_evento.toInt() - '0';
-    
+  Serial.print("Digite o evento:");
+  while (condicao == false){
+    str_evento = Serial.readStringUntil('\n');
+    evento = (str_evento[0] - '0');
+    if (evento != -48){
+      condicao = true;
+    }
+  }
+  
   return evento;
 }
 
@@ -121,6 +133,7 @@ int obterEvento() {
  Retorno: codigo da acao
 *************************************************************************/
 int obterAcao(int estado, int codigoEvento) {
+  Serial.println(acao_matrizTransicaoEstados[estado][codigoEvento]);
   return acao_matrizTransicaoEstados[estado][codigoEvento];
 }
 
@@ -169,16 +182,19 @@ void loop(){
   } else {
       codigoEvento = eventoInterno;
   }
+  if (codigoEvento < 0 || codigoEvento > 3){
+      codigoEvento = NENHUM_EVENTO;
+  }
   if (codigoEvento != NENHUM_EVENTO)
   {
       codigoAcao = obterAcao(estado, codigoEvento);
       estado = obterProximoEstado(estado, codigoEvento);
       eventoInterno = executarAcao(codigoAcao);
-//      Serial.print("Estado: ");
-//      Serial.print(estado);
-//      Serial.print(" Evento: ");
-//      Serial.print(codigoEvento);
-//      Serial.print(" Acao: ");
-//      Serial.println(codigoAcao);
+      Serial.print("Estado: ");
+      Serial.print(estado);
+      Serial.print(" Evento: ");
+      Serial.print(codigoEvento);
+      Serial.print(" Acao: ");
+      Serial.println(codigoAcao);
   }
 }
