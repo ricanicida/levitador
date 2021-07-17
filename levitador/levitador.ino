@@ -1,7 +1,10 @@
 #include "definicoes_sistema.h"
+#include "ligar.h"
+#include "configurar.h"
+#include "desligar.h"
 
 /***********************************************************************
- Estaticos
+ Globais
  ***********************************************************************/
 int codigoEvento = NENHUM_EVENTO;
 int eventoInterno = NENHUM_EVENTO;
@@ -9,6 +12,9 @@ int estado = DESLIGADO;
 int codigoAcao;
 int acao_matrizTransicaoEstados[NUM_ESTADOS][NUM_EVENTOS];
 int proximo_estado_matrizTransicaoEstados[NUM_ESTADOS][NUM_EVENTOS];
+
+byte TP = 0b10101010; //sinal oposto a cada pino
+int numero_nos;
 
 
 
@@ -32,18 +38,22 @@ int executarAcao(int codigoAcao)
     case A01:
         // ligar();
         Serial.println("ligar");
+        ligar_init();
         break;
     case A02:
         // configurar();
         Serial.println("configurar");
+        configurar_nos(numero_nos);
         break;
     case A03:
         //reinicializar();
         Serial.println("reinicializar");
+        reinicializar_sistema();
         break;
     case A04:
         // desligar();
         Serial.println("desligar");
+        desligar_transdutores();
         break;
     } // switch
 
@@ -151,31 +161,13 @@ int obterProximoEstado(int estado, int codigoEvento) {
 
 
 
-// byte TP = 0b10101010; //sinal oposto a cada pino
+
 void setup()
 {
   Serial.begin(9600);
   iniciaSistema();
   Serial.println("Sistema iniciado");
-  
-//  DDRC = 0b11111111; // define todas os pinos analogicos como output
-//  // Inicializa timer 1
-//  noInterrupts();           // desabilita interrupçoes
-//  TCCR1A = 0;               // inicia Timer/Counter1 de 8 bits de controle do registrador A
-//  TCCR1B = 0;               // inicia Timer/Counter1 de 8 bits de controle do registrador B
-//  TCNT1  = 0;               // inicia Timer/Counter de 16 bits
-//  OCR1A = 200;              // configura a frequencia a partir da frequencia interna do arduino
-//                            //(16MHz / 200 = 80kHz square -> 40kHz full wave)
-//  TCCR1B |= (1 << WGM12);   // CTC mode: possibilita a alternancia dos pinos mesmo sem interrupcoes
-//  TCCR1B |= (1 << CS10);    // inicia o timer Fcpu/64
-//  TIMSK1 |= (1 << OCIE1A);  // TIMSK1: mascara de registrador de timer interrupt 
-//  interrupts();             // habilita interrupçoes
 }
-//ISR(TIMER1_COMPA_vect)          
-//{
-//  PORTC = TP; // envia o valor de TP para as saidas
-//  TP = ~TP;   // inverte o TP para a proxima vez que rodar
-//}
 
 void loop(){
   if (eventoInterno == NENHUM_EVENTO) {
