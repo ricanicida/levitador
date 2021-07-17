@@ -151,29 +151,30 @@ int obterProximoEstado(int estado, int codigoEvento) {
 
 
 
-// byte TP = 0b10101010; //every 2nd port receives the opposite signal
+// byte TP = 0b10101010; //sinal oposto a cada pino
 void setup()
 {
   Serial.begin(9600);
   iniciaSistema();
   Serial.println("Sistema iniciado");
   
-//  DDRC = 0b11111111; //Define all analog ports as outputs
-//  // Initialize timer 1
-//  noInterrupts();           // Disable interrupts
-//  TCCR1A = 0;
-//  TCCR1B = 0;
-//  TCNT1  = 0;
-//  OCR1A = 200;              // Set Compare Match Register (16MHz / 200 = 80kHz square -> 40kHz full wave)
-//  TCCR1B |= (1 << WGM12);   // CTC mode
-//  TCCR1B |= (1 << CS10);    
-//  TIMSK1 |= (1 << OCIE1A);  // Switch on Compare Timer Interrupt  
-//  interrupts();             // Activate interrupts
+//  DDRC = 0b11111111; // define todas os pinos analogicos como output
+//  // Inicializa timer 1
+//  noInterrupts();           // desabilita interrupçoes
+//  TCCR1A = 0;               // inicia Timer/Counter1 de 8 bits de controle do registrador A
+//  TCCR1B = 0;               // inicia Timer/Counter1 de 8 bits de controle do registrador B
+//  TCNT1  = 0;               // inicia Timer/Counter de 16 bits
+//  OCR1A = 200;              // configura a frequencia a partir da frequencia interna do arduino
+//                            //(16MHz / 200 = 80kHz square -> 40kHz full wave)
+//  TCCR1B |= (1 << WGM12);   // CTC mode: possibilita a alternancia dos pinos mesmo sem interrupcoes
+//  TCCR1B |= (1 << CS10);    // inicia o timer Fcpu/64
+//  TIMSK1 |= (1 << OCIE1A);  // TIMSK1: mascara de registrador de timer interrupt 
+//  interrupts();             // habilita interrupçoes
 }
 //ISR(TIMER1_COMPA_vect)          
 //{
-//  PORTC = TP; // Send the value TP to the outputs
-//  TP = ~TP;   // Invert TP for the next run
+//  PORTC = TP; // envia o valor de TP para as saidas
+//  TP = ~TP;   // inverte o TP para a proxima vez que rodar
 //}
 
 void loop(){
