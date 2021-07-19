@@ -2,6 +2,7 @@
 #include "ligar.h"
 #include "configurar.h"
 #include "desligar.h"
+#include "reinicializar.h"
 
 /***********************************************************************
  Globais
@@ -13,7 +14,7 @@ int codigoAcao;
 int acao_matrizTransicaoEstados[NUM_ESTADOS][NUM_EVENTOS];
 int proximo_estado_matrizTransicaoEstados[NUM_ESTADOS][NUM_EVENTOS];
 
-
+//byte TP = 0b10101010; //sinal oposto a cada pino
 
 
 /************************************************************************
@@ -34,20 +35,16 @@ int executarAcao(int codigoAcao)
     switch(codigoAcao)
     {
     case A01:
-        // ligar();
-        Serial.println("ligar");
+        ligar_init();
         break;
     case A02:
-        // configurar();
-        Serial.println("configurar");
+        configurar_nos();
         break;
     case A03:
-        //reinicializar();
-        Serial.println("reinicializar");
+        reinicializar_sistema();
         break;
     case A04:
-        // desligar();
-        Serial.println("desligar");
+        desligar_transdutores();
         break;
     } // switch
 
@@ -161,27 +158,27 @@ void setup()
   Serial.begin(9600);
   iniciaSistema();
   
-  DDRC = 0b11111111; // define todas os pinos analogicos como output
-  // Inicializa timer 1
-  noInterrupts();           // desabilita interrupções
-  TCCR1A = 0;               // configura timer para operação normal
-  TCCR1B = 0;               // limpa registrador
-  TCNT1  = 0;               // zera temporizado
-  OCR1A = 200;              // carrega registrador de comparação:
-                            //(16MHz / 200 = 80kHz square -> 40kHz full wave)
-  TCCR1B |= (1 << WGM12);   // CTC mode: possibilita a alternância dos pinos mesmo sem interrupções
-  TCCR1B |= (1 << CS10);    // inicia o timer Fcpu/64
-  TIMSK1 |= (1 << OCIE1A);  // habilita interrupção por igualdade de comparação
-  interrupts();             // habilita interrupções
+//  DDRC = 0b11111111; // define todas os pinos analogicos como output
+//  // Inicializa timer 1
+//  noInterrupts();           // desabilita interrupções
+//  TCCR1A = 0;               // configura timer para operação normal
+//  TCCR1B = 0;               // limpa registrador
+//  TCNT1  = 0;               // zera temporizado
+//  OCR1A = 200;              // carrega registrador de comparação:
+//                            //(16MHz / 200 = 80kHz square -> 40kHz full wave)
+//  TCCR1B |= (1 << WGM12);   // CTC mode: possibilita a alternância dos pinos mesmo sem interrupções
+//  TCCR1B |= (1 << CS10);    // inicia o timer Fcpu/64
+//  TIMSK1 |= (1 << OCIE1A);  // habilita interrupção por igualdade de comparação
+//  interrupts();             // habilita interrupções
   
   Serial.println("Sistema iniciado");
 }
 
-ISR(TIMER1_COMPA_vect)    // interrupção por igualdade de comparação no TIMER1        
-{
-  PORTC = TP; // envia o valor de TP para as saídas
-  TP = ~TP;   // inverte o TP para a próxima vez que rodar
-}
+//ISR(TIMER1_COMPA_vect)    // interrupção por igualdade de comparação no TIMER1        
+//{
+//  PORTC = TP; // envia o valor de TP para as saídas
+//  TP = ~TP;   // inverte o TP para a próxima vez que rodar
+//}
 
 void loop(){
   if (eventoInterno == NENHUM_EVENTO) {
