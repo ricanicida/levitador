@@ -4,6 +4,6 @@
 #include "desligar.h"
 
 void desligar_transdutores(void){
-  DDRC = 0b11111111; // define todas os pinos analogicos como output
+  DDRC = 0b00000000; // define todas os pinos analogicos como input
   Serial.println("Sistema desligado");
 }

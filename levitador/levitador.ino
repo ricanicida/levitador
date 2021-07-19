@@ -9,12 +9,12 @@
  ***********************************************************************/
 int codigoEvento = NENHUM_EVENTO;
 int eventoInterno = NENHUM_EVENTO;
-int estado = DESLIGADO;
+int estado = INICIAL;
 int codigoAcao;
 int acao_matrizTransicaoEstados[NUM_ESTADOS][NUM_EVENTOS];
 int proximo_estado_matrizTransicaoEstados[NUM_ESTADOS][NUM_EVENTOS];
 
-byte TP; //sinal dos pinos do PORTC
+byte TP = 0b10101010; //sinal dos pinos do PORTC
 int numero_nos;
 
 
@@ -29,6 +29,7 @@ int numero_nos;
 int executarAcao(int codigoAcao)
 {
     int retval;
+    float freq;
 
     retval = NENHUM_EVENTO;
     if (codigoAcao == NENHUMA_ACAO)
@@ -38,14 +39,17 @@ int executarAcao(int codigoAcao)
     {
     case A01:
         // ligar();
-        ligar_init(&TP);
+        ligar_init();
         break;
     case A02:
         // configurar();
-        configurar_nos();
+        freq = calcula_freq();
+//        desligar_transdutores();
+        configurar_nos(freq);
         break;
     case A03:
         //reinicializar();
+//        desligar_transdutores();
         reinicializar_sistema();
         break;
     case A04:
@@ -161,9 +165,17 @@ int obterProximoEstado(int estado, int codigoEvento) {
 
 void setup()
 {
-  Serial.begin(9600);
-  iniciaSistema();
-  Serial.println("Sistema iniciado");
+  if (estado == INICIAL){
+    Serial.begin(9600);
+    iniciaSistema();
+    Serial.println("Sistema iniciado");
+    estado = DESLIGADO;
+  } else {
+    if (codigoEvento != NENHUM_EVENTO)
+    {
+      eventoInterno = executarAcao(codigoAcao);
+    }
+  }
 }
 
 ISR(TIMER1_COMPA_vect)    // interrupção por igualdade de comparação no TIMER1        
@@ -185,7 +197,7 @@ void loop(){
   {
       codigoAcao = obterAcao(estado, codigoEvento);
       estado = obterProximoEstado(estado, codigoEvento);
-      eventoInterno = executarAcao(codigoAcao);
+      setup();
       Serial.print("Estado: ");
       Serial.print(estado);
       Serial.print(" Evento: ");

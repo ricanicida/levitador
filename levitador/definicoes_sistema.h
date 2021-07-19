@@ -10,6 +10,7 @@
 
 
 // ESTADOS
+#define INICIAL  -1
 #define DESLIGADO  0
 #define LIGADO     1
 #define LEVITACAO  2

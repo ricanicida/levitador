@@ -3,9 +3,8 @@
 #include "definicoes_sistema.h"
 #include "ligar.h"
 
-void ligar_init(char *tp){      // configura e liga os transdutores a uma frequência de 40kHz
+void ligar_init(void){      // configura e liga os transdutores a uma frequência de 40kHz
 
-  tp = 0b10101010; //sinal oposto a cada pino
     
   DDRC = 0b11111111; // define todas os pinos analogicos como output
   // Inicializa timer 1
