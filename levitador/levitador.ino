@@ -2,6 +2,7 @@
 #include "ligar.h"
 #include "configurar.h"
 #include "desligar.h"
+#include "reinicializar.h"
 
 /***********************************************************************
  Globais
@@ -13,7 +14,7 @@ int codigoAcao;
 int acao_matrizTransicaoEstados[NUM_ESTADOS][NUM_EVENTOS];
 int proximo_estado_matrizTransicaoEstados[NUM_ESTADOS][NUM_EVENTOS];
 
-byte TP = 0b10101010; //sinal oposto a cada pino
+byte TP; //sinal dos pinos do PORTC
 int numero_nos;
 
 
@@ -37,22 +38,18 @@ int executarAcao(int codigoAcao)
     {
     case A01:
         // ligar();
-        Serial.println("ligar");
-        ligar_init();
+        ligar_init(&TP);
         break;
     case A02:
         // configurar();
-        Serial.println("configurar");
-        configurar_nos(numero_nos);
+        configurar_nos();
         break;
     case A03:
         //reinicializar();
-        Serial.println("reinicializar");
         reinicializar_sistema();
         break;
     case A04:
         // desligar();
-        Serial.println("desligar");
         desligar_transdutores();
         break;
     } // switch
@@ -167,6 +164,12 @@ void setup()
   Serial.begin(9600);
   iniciaSistema();
   Serial.println("Sistema iniciado");
+}
+
+ISR(TIMER1_COMPA_vect)    // interrupção por igualdade de comparação no TIMER1        
+{
+  PORTC = TP; // envia o valor de TP para as saídas
+  TP = ~TP;   // inverte o TP para a próxima vez que rodar
 }
 
 void loop(){

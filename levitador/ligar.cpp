@@ -3,9 +3,10 @@
 #include "definicoes_sistema.h"
 #include "ligar.h"
 
-void ligar_init(void){      // configura e liga os transdutores a uma frequência de 40kHz
-  
-  
+void ligar_init(char *tp){      // configura e liga os transdutores a uma frequência de 40kHz
+
+  tp = 0b10101010; //sinal oposto a cada pino
+    
   DDRC = 0b11111111; // define todas os pinos analogicos como output
   // Inicializa timer 1
   noInterrupts();           // desabilita interrupções
@@ -17,11 +18,7 @@ void ligar_init(void){      // configura e liga os transdutores a uma frequênci
   TCCR1B |= (1 << WGM12);   // CTC mode: possibilita a alternância dos pinos mesmo sem interrupções
   TCCR1B |= (1 << CS10);    // inicia o timer Fcpu/64
   TIMSK1 |= (1 << OCIE1A);  // habilita interrupção por igualdade de comparação
-  interrupts();             // habilita interrupções
-  
-  ISR(TIMER1_COMPA_vect)    // interrupção por igualdade de comparação no TIMER1        
-  {
-    PORTC = TP; // envia o valor de TP para as saídas
-    TP = ~TP;   // inverte o TP para a próxima vez que rodar
-  }
+  interrupts();             // habilita interrupções 
+
+  Serial.println("Sistema ligado");
 }
