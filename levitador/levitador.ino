@@ -18,7 +18,6 @@ byte TP = 0b10101010; //sinal dos pinos do PORTC
 int numero_nos;
 
 
-
 /************************************************************************
  executarAcao
  Executa uma acao
