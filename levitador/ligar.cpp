@@ -19,5 +19,5 @@ void ligar_init(void){      // configura e liga os transdutores a uma frequênci
   TIMSK1 |= (1 << OCIE1A);  // habilita interrupção por igualdade de comparação
   interrupts();             // habilita interrupções 
 
-  Serial.println("Sistema ligado");
+  Serial.println("Transdutores ligados");
 }

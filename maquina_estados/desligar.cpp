@@ -4,5 +4,5 @@
 #include "desligar.h"
 
 void desligar_transdutores(void){
-    Serial.println("Sistema desligado");
+    Serial.println("Transdutores desligados");
 }

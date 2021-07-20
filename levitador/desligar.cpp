@@ -5,5 +5,5 @@
 
 void desligar_transdutores(void){
   DDRC = 0b00000000; // define todas os pinos analogicos como input
-  Serial.println("Sistema desligado");
+  Serial.println("Transdutores desligados");
 }

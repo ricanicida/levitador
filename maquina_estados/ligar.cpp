@@ -4,5 +4,5 @@
 #include "ligar.h"
 
 void ligar_init(void){  
-    Serial.println("Sistema ligado");
+    Serial.println("Transdutores ligados");
 }
