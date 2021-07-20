@@ -113,11 +113,6 @@ void iniciaSistema()
  Parametros de entrada: nenhum
  Retorno: codigo do evento
 *************************************************************************/
-void types(String a) { Serial.println("it's a String"); }
-void types(int a) { Serial.println("it's an int"); }
-void types(char *a) { Serial.println("it's a char*"); }
-void types(float a) { Serial.println("it's a float"); }
-void types(bool a) { Serial.println("it's a bool"); }
 
 int evento = NENHUM_EVENTO;
 String str_evento;
@@ -164,12 +159,12 @@ int obterProximoEstado(int estado, int codigoEvento) {
 
 void setup()
 {
-  if (estado == INICIAL){
+  if (estado == INICIAL){                       // setup inicial que roda uma vez
     Serial.begin(9600);
     iniciaSistema();
     Serial.println("Sistema iniciado");
     estado = DESLIGADO;
-  } else {
+  } else {                                      // executar ação deve ser chamada no void setup()
     if (codigoEvento != NENHUM_EVENTO)
     {
       eventoInterno = executarAcao(codigoAcao);

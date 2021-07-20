@@ -12,7 +12,7 @@ float calcula_freq(void){
   
 
   Serial.println("Digite o numero de nos: ");
-  while (condicao == false){
+  while (condicao == false){                    // loop para aguardar recebimento do número de nós
     str_n = Serial.readStringUntil('\n');
     n = (str_n[0] - '0');
     if (n != -48){
@@ -20,8 +20,8 @@ float calcula_freq(void){
     }
   }
 
-  lambda = 2*0.01/n;
-  freq = 340/lambda;
+  lambda = 2*0.01/n;                            // calcula o lambda
+  freq = 340/lambda;                            // calcula o frequencia desejada
   
   Serial.print("Sistema configurado com ");
   Serial.print(n);
